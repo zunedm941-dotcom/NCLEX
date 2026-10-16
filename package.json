@@ -1,0 +1,17 @@
+{
+  "name": "nclex-exam-simulator-pro",
+  "version": "2.0.0",
+  "description": "Full-featured NCLEX Exam Simulator with 11,718 questions and Pearson VUE clinical tools.",
+  "scripts": {},
+  "keywords": [
+    "nclex",
+    "nclex-rn",
+    "nclex-pn",
+    "nursing",
+    "pearson-vue",
+    "simulator",
+    "exam-prep"
+  ],
+  "author": "Antigravity NCLEX Simulator",
+  "license": "MIT"
+}

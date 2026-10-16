@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="modern" data-fontsize="normal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NCLEX Exam Simulator Pro - Pearson VUE & NextGen Clinical Edition</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+  <meta name="description" content="NextGen NCLEX Exam Simulator with 5,600+ Questions, SATA drills, clinical dosage calculations, Pearson VUE tools, and in-depth performance analytics.">
+  <link rel="stylesheet" href="app.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231e3a8a'/><path d='M50 20 L50 80 M20 50 L80 50' stroke='white' stroke-width='14' stroke-linecap='round'/></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="brand" id="brandLogo">
+      <div class="brand-icon">RN</div>
+      <div class="brand-info">
+        <h1>NCLEX Exam Simulator Pro</h1>
+        <p>NextGen Clinical Question Bank · Pearson VUE Tools</p>
+      </div>
+    </div>
+
+    <div class="header-tools">
+      <button type="button" class="tool-btn" id="btnOpenCalculator" title="Open On-Screen Calculator (HotKey: C)">
+        <span>🖩</span> Calculator
+      </button>
+      <button type="button" class="tool-btn" id="btnOpenLabValues" title="NCLEX Normal Lab Reference Ranges">
+        <span>🧪</span> Lab Values
+      </button>
+      
+      <div style="height: 20px; width: 1px; background: rgba(255,255,255,0.2); margin: 0 0.25rem;"></div>
+      
+      <!-- Theme Switcher -->
+      <button type="button" class="tool-btn theme-opt active" data-theme="modern" title="Modern Clinical Theme">Modern</button>
+      <button type="button" class="tool-btn theme-opt" data-theme="vue" title="Official Pearson VUE NCLEX Theme">Pearson VUE</button>
+      <button type="button" class="tool-btn theme-opt" data-theme="dark" title="Dark Night Study Theme">Dark</button>
+
+      <!-- Font Size Adjuster -->
+      <button type="button" class="tool-btn font-opt active" data-size="normal" title="Standard Text">A</button>
+      <button type="button" class="tool-btn font-opt" data-size="large" title="Large Text">A+</button>
+      <button type="button" class="tool-btn font-opt" data-size="xlarge" title="Extra Large Text">A++</button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="nav-bar">
+    <div class="nav-tab active" data-view="dashboard">
+      <span>📊 Dashboard</span>
+    </div>
+    <div class="nav-tab" data-view="setup">
+      <span>⚙ Exam Builder</span>
+    </div>
+    <div class="nav-tab" data-view="explorer">
+      <span>📚 Question Explorer</span>
+      <span class="tab-badge" id="totalQuestionsBadge">11,718</span>
+    </div>
+    <div class="nav-tab" data-view="saved">
+      <span>★ Bookmarked</span>
+      <span class="tab-badge" id="navSavedBadge">0</span>
+    </div>
+    <div class="nav-tab" data-view="analytics">
+      <span>📈 Test History</span>
+    </div>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- VIEW 1: DASHBOARD -->
+    <section id="view-dashboard" class="view-panel">
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <div class="hero-text">
+          <h2>NCLEX-RN & PN Readiness Hub</h2>
+          <p>Master your nursing board examination with 11,700+ clinical questions from 6 major question banks (Comprehensive, Exam Cram, NCSBN, NCLEX 4, NCLEX 5, and HESI 1200), authentic Select-All-That-Apply (SATA) drills, dosage math, and realistic Pearson VUE exam simulation.</p>
+          <div class="hero-stats-row">
+            <div class="hero-stat">
+              <div class="stat-num" id="dashTotalBank">11,718</div>
+              <div class="stat-label">Total Questions</div>
+            </div>
+            <div class="hero-stat">
+              <div class="stat-num" id="dashPracticedCount">0</div>
+              <div class="stat-label">Questions Practiced</div>
+            </div>
+            <div class="hero-stat">
+              <div class="stat-num" id="dashOverallAccuracy">0%</div>
+              <div class="stat-label">Overall Accuracy</div>
+            </div>
+            <div class="hero-stat">
+              <div class="stat-num" id="dashBookmarksCount">0</div>
+              <div class="stat-label">Saved Questions</div>
+            </div>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.08); padding: 1.5rem; border-radius: var(--radius-lg); text-align: center; min-width: 200px; border: 1px solid rgba(255,255,255,0.15);">
+          <div style="font-size: 0.85rem; color: #cbd5e1; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Estimated NCLEX Readiness</div>
+          <div id="dashPassProbability" style="font-size: 1.5rem; font-weight: 900; margin: 0.5rem 0; color: #94a3b8;">Not Enough Data</div>
+          <div style="font-size: 0.75rem; color: #94a3b8;">Based on Pearson VUE logit benchmarks</div>
+        </div>
+      </div>
+
+      <!-- Quick Launch Modes -->
+      <h3 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 800;">Quick Practice Modes</h3>
+      <div class="quick-grid">
+        <!-- Mode 1: NCLEX Exam Cram Practice -->
+        <div class="quick-card" id="btnQuickCram">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon" style="background:#fef3c7; color:#b45309;">📖</div>
+              <h3>NCLEX Exam Cram Drill</h3>
+            </div>
+            <p>1,250 High-yield Exam Cram practice questions organized across 5 full clinical chapters with verified answers.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>1,250 Questions · 5 Chapters</span>
+            <span class="btn btn-sm btn-primary">Practice Cram</span>
+          </div>
+        </div>
+
+        <!-- Mode 2: NCSBN Official Exam Drill -->
+        <div class="quick-card" id="btnQuickNCSBN">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon" style="background:#e0e7ff; color:#3730a3;">🏛</div>
+              <h3>Official NCSBN Exam Drill</h3>
+            </div>
+            <p>884 Verified NCSBN questions featuring thorough clinical explanations, case rationales, and official answer keys.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>884 Questions · Full Rationales</span>
+            <span class="btn btn-sm btn-secondary">Practice NCSBN</span>
+          </div>
+        </div>
+
+        <!-- Mode: NCLEX Practice Bank 4 -->
+        <div class="quick-card" id="btnQuickBank4">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon" style="background:#dcfce7; color:#15803d;">🩺</div>
+              <h3>NCLEX Practice Bank 4</h3>
+            </div>
+            <p>977 High-yield board practice questions with 213 Select All That Apply (SATA) items and in-depth rationales.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>977 Questions · 213 SATA</span>
+            <span class="btn btn-sm btn-secondary">Practice Bank 4</span>
+          </div>
+        </div>
+
+        <!-- Mode: NCLEX Practice Bank 5 -->
+        <div class="quick-card" id="btnQuickBank5">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon" style="background:#fce7f3; color:#be185d;">📋</div>
+              <h3>NCLEX Practice Bank 5</h3>
+            </div>
+            <p>1,786 Comprehensive questions across major exam sections with detailed source page clinical explanations.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>1,786 Questions · Scenarios</span>
+            <span class="btn btn-sm btn-secondary">Practice Bank 5</span>
+          </div>
+        </div>
+
+        <!-- Mode: HESI 1200 Bank 6 -->
+        <div class="quick-card" id="btnQuickHESI6">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon" style="background:#e0f2fe; color:#0369a1;">🏥</div>
+              <h3>HESI 1200 Exam Bank 6</h3>
+            </div>
+            <p>1,148 Renowned HESI practice questions featuring comprehensive clinical rationales, exam sections, and page references.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>1,148 Questions · Verified Keys</span>
+            <span class="btn btn-sm btn-secondary">Practice HESI</span>
+          </div>
+        </div>
+
+        <!-- Mode 2: NCLEX CAT Simulation -->
+        <div class="quick-card" id="btnQuickCAT">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon">🎓</div>
+              <h3>Realistic NCLEX CAT Exam</h3>
+            </div>
+            <p>85 Comprehensive questions mimicking the real Pearson VUE testing environment with official timer and strict exam conditions.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>85 Questions · 3 Hours</span>
+            <span class="btn btn-sm btn-secondary">Start Exam</span>
+          </div>
+        </div>
+
+        <!-- Mode 3: Daily Practice (Tutor) -->
+        <div class="quick-card" id="btnQuickPractice">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon">💡</div>
+              <h3>Daily Tutor Practice</h3>
+            </div>
+            <p>25 Questions with instant rationales, explanations, and immediate feedback after every answer. Perfect for daily revision.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>25 Questions · Untimed</span>
+            <span class="btn btn-sm btn-secondary">Practice Now</span>
+          </div>
+        </div>
+
+        <!-- Mode 3: SATA Specialist Drill -->
+        <div class="quick-card" id="btnQuickSATA">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon">☑</div>
+              <h3>SATA Specialist Drill</h3>
+            </div>
+            <p>Master the most challenging NextGen NCLEX format with 50 Select-All-That-Apply clinical questions with partial credit tracking.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>50 Questions · 60 Mins</span>
+            <span class="btn btn-sm btn-secondary">Drill SATA</span>
+          </div>
+        </div>
+
+        <!-- Mode 4: Dosage & Calculation Math -->
+        <div class="quick-card" id="btnQuickMath">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon">🖩</div>
+              <h3>Dosage & Fluid Calculations</h3>
+            </div>
+            <p>Practice clinical math calculations, IV flow rates (gtt/min, mL/hr), pediatric dosing, and fill-in-the-blank numeric items.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>40 Questions · Calculation</span>
+            <span class="btn btn-sm btn-secondary">Solve Math</span>
+          </div>
+        </div>
+
+        <!-- Mode 5: Weakness Remediation -->
+        <div class="quick-card" id="btnQuickWeakness">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon">🎯</div>
+              <h3>Missed Questions Remediation</h3>
+            </div>
+            <p>Retest yourself on questions you previously answered incorrectly across past exams to reinforce clinical weaknesses.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>Targeted Weaknesses</span>
+            <span class="btn btn-sm btn-secondary">Review Missed</span>
+          </div>
+        </div>
+
+        <!-- Mode 6: Custom Exam Builder -->
+        <div class="quick-card" onclick="document.querySelector('.nav-tab[data-view=\'setup\']').click()">
+          <div>
+            <div class="quick-card-header">
+              <div class="quick-icon">⚡</div>
+              <h3>Custom Exam Builder</h3>
+            </div>
+            <p>Customize specific nursing categories (Pharmacology, Med-Surg, Pediatrics, Maternal), question counts, and timing limits.</p>
+          </div>
+          <div class="quick-card-meta">
+            <span>Full Customization</span>
+            <span class="btn btn-sm btn-primary">Build Quiz</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Attempts -->
+      <div class="card">
+        <h3 style="margin-bottom: 1rem; font-size: 1.15rem; font-weight: 800;">Recent Exam History</h3>
+        <div id="dashRecentExamsList"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: EXAM BUILDER / SETUP -->
+    <section id="view-setup" class="view-panel hidden">
+      <div class="card">
+        <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">Configure Custom NCLEX Exam</h2>
+        <p class="text-muted" style="margin-bottom: 1.5rem;">Customize your study session by topic, question format, timing, and question pool.</p>
+
+        <div class="setup-form">
+          <div class="form-group">
+            <label class="form-label" for="setupBankSourceSelect">Question Bank Source</label>
+            <select id="setupBankSourceSelect" class="form-select">
+              <option value="all" selected>All Question Banks (11,718 Questions)</option>
+              <option value="Comprehensive NCLEX">Comprehensive NCLEX Bank (5,673 Questions)</option>
+              <option value="NCLEX Practice Bank 5">NCLEX Practice Bank 5 (1,786 Questions)</option>
+              <option value="NCLEX Exam Cram">NCLEX Exam Cram (1,250 Questions across 5 Chapters)</option>
+              <option value="HESI 1200 Bank 6">HESI 1200 Exam Bank 6 (1,148 Questions)</option>
+              <option value="NCLEX Practice Bank 4">NCLEX Practice Bank 4 (977 Questions with 213 SATA)</option>
+              <option value="NCSBN Official">Official NCSBN Bank (884 Questions with Rationales)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="setupCountSelect">Number of Questions</label>
+            <select id="setupCountSelect" class="form-select">
+              <option value="25">25 Questions (Quick Review)</option>
+              <option value="50">50 Questions (Standard Quiz)</option>
+              <option value="75">75 Questions (NCLEX Min Standard)</option>
+              <option value="85" selected>85 Questions (NextGen NCLEX CAT Standard)</option>
+              <option value="100">100 Questions (Extended Exam)</option>
+              <option value="150">150 Questions (NCLEX Maximum Length)</option>
+              <option value="all">Entire Question Bank (Full Bank)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="setupDurationSelect">Time Limit</label>
+            <select id="setupDurationSelect" class="form-select">
+              <option value="0">Untimed (Self-Paced Study)</option>
+              <option value="30">30 Minutes</option>
+              <option value="60">60 Minutes (1 Hour)</option>
+              <option value="90">90 Minutes (1.5 Hours)</option>
+              <option value="120">120 Minutes (2 Hours)</option>
+              <option value="180" selected>180 Minutes (3 Hours - Realistic)</option>
+              <option value="300">300 Minutes (5 Hours - Full Max)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="setupModeSelect">Feedback Mode</label>
+            <select id="setupModeSelect" class="form-select">
+              <option value="exam" selected>Exam Mode (Feedback at the end, realistic testing)</option>
+              <option value="practice">Practice / Tutor Mode (Instant rationales after each question)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="setupTypeSelect">Question Type Filter</label>
+            <select id="setupTypeSelect" class="form-select">
+              <option value="all" selected>All Question Types (Mixed)</option>
+              <option value="single">Single Choice Multiple-Choice Only</option>
+              <option value="sata">Select All That Apply (SATA) Only</option>
+              <option value="numeric">Dosage & Numeric Calculations Only</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="setupPoolSelect">Question Pool Selection</label>
+            <select id="setupPoolSelect" class="form-select">
+              <option value="bank" selected>General Question Bank</option>
+              <option value="missed">Previously Missed Questions Only</option>
+              <option value="saved">Bookmarked / Saved Questions Only</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="setupOrderSelect">Question Ordering</label>
+            <select id="setupOrderSelect" class="form-select">
+              <option value="random" selected>Randomized Questions (Recommended)</option>
+              <option value="sequential">Sequential Question Bank Order</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Category Selector -->
+        <div style="margin: 1.5rem 0;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+            <label class="form-label" style="margin:0;">Clinical Nursing Categories</label>
+            <div style="display:flex; gap:0.5rem;">
+              <button type="button" class="btn btn-sm btn-secondary" id="btnSelectAllCats">Select All</button>
+              <button type="button" class="btn btn-sm btn-secondary" id="btnDeselectAllCats">Clear All</button>
+            </div>
+          </div>
+          <div class="category-checkboxes" id="setupCategoryCheckboxes"></div>
+        </div>
+
+        <div style="display:flex; gap: 1rem; flex-wrap:wrap; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-lg btn-primary" id="btnStartCustomExam">
+            🚀 Launch Custom Exam
+          </button>
+          <button type="button" class="btn btn-lg btn-secondary" onclick="document.querySelector('.nav-tab[data-view=\'dashboard\']').click()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: ACTIVE EXAM SIMULATION (PEARSON VUE STYLE) -->
+    <section id="view-exam" class="view-panel hidden">
+      <!-- Exam Control Bar -->
+      <div class="exam-header">
+        <div class="exam-indicators">
+          <span class="badge badge-primary font-bold" id="examBankIdBadge">Bank #1</span>
+          <span class="badge" id="examTypeBadge">Multiple Choice</span>
+          <span class="badge badge-primary" id="examCategoryBadge">Pharmacology</span>
+        </div>
+
+        <div class="exam-stats-group">
+          <div style="font-size: 0.85rem; color: var(--text-muted);">
+            Answered <strong id="examAnsweredStat" style="color:var(--text-main);">0</strong> · 
+            Remaining <strong id="examRemainingStat" style="color:var(--text-main);">0</strong>
+          </div>
+          <div class="exam-timer" id="examTimerWrap">
+            <span>⏱</span>
+            <span id="examTimerText">--:--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-container">
+        <div class="progress-fill" id="examProgressBar" style="width: 0%;"></div>
+      </div>
+
+      <!-- Main Question Container -->
+      <div class="question-card">
+        <div class="question-meta">
+          <span id="examQuestionCounter" style="font-size:1rem; font-weight:800; color:var(--primary);">Question 1 of 85</span>
+          <span class="text-muted" style="font-size:0.8rem;">Keyboard: 1-4 for options, N: Next, P: Prev, M: Mark</span>
+        </div>
+
+        <div class="question-stem" id="questionStemText">
+          Loading question text...
+        </div>
+
+        <!-- SATA Instruction Banner -->
+        <div id="sataInstructionBanner" class="sata-instruction hidden">
+          <span>ℹ</span>
+          <span><strong>Select All That Apply:</strong> You may select more than one option. Check all options that meet the clinical criteria.</span>
+        </div>
+
+        <!-- Options Container -->
+        <div id="optionsContainer" class="options-grid"></div>
+
+        <!-- Numeric Dosage Input Container -->
+        <div id="numericContainer" class="numeric-input-wrap hidden">
+          <label style="font-weight:700; font-size:1rem;">Enter numeric answer below:</label>
+          <div class="numeric-field-group">
+            <input type="text" id="numericAnswerInput" class="numeric-input" placeholder="0.0" autocomplete="off">
+          </div>
+          <p class="text-muted" style="font-size:0.85rem;">Round your answer as specified in the question (e.g. nearest tenth or whole number).</p>
+        </div>
+
+        <!-- Practice Mode Instant Feedback Panel -->
+        <div id="practiceFeedbackPanel" class="rationale-panel hidden">
+          <div class="rationale-header">✓ Correct</div>
+          <div class="rationale-body"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Controls -->
+      <div class="exam-controls">
+        <div class="controls-left">
+          <button type="button" class="btn btn-secondary" id="btnPrevQuestion">
+            ← Previous
+          </button>
+          <button type="button" class="btn btn-secondary" id="btnNextQuestion">
+            Next →
+          </button>
+        </div>
+
+        <div class="controls-right">
+          <button type="button" class="btn btn-secondary" id="btnMarkReview">
+            ☆ Mark for Review
+          </button>
+          <button type="button" class="btn btn-secondary" id="btnTogglePalette">
+            ☰ Navigator
+          </button>
+          <button type="button" class="btn btn-danger" id="btnSubmitExam">
+            Finish & Submit Exam
+          </button>
+        </div>
+      </div>
+
+      <!-- Question Palette / Navigator Drawer -->
+      <div id="examPaletteDrawer" class="palette-container hidden">
+        <div class="palette-header">
+          <h4 style="font-size: 0.95rem; font-weight: 800;">Question Navigator</h4>
+          <div class="palette-legend">
+            <div class="legend-item"><div class="legend-dot answered"></div> Answered</div>
+            <div class="legend-item"><div class="legend-dot unanswered"></div> Unanswered</div>
+            <div class="legend-item"><div class="legend-dot marked"></div> Marked for Review</div>
+            <div class="legend-item"><div class="legend-dot current"></div> Current</div>
+          </div>
+        </div>
+        <div class="palette-grid" id="questionPaletteGrid"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: RESULTS & IN-DEPTH REVIEW -->
+    <section id="view-results" class="view-panel hidden">
+      <div class="results-summary">
+        <!-- Score Card -->
+        <div class="score-card">
+          <div class="score-circle pass" id="resScoreCircle">
+            <div class="score-percent" id="resScorePercent">0%</div>
+          </div>
+          <div class="score-status" id="resScoreStatus">Passing Standard Met</div>
+          <p class="text-muted" style="font-size: 0.8rem; margin-top: 0.5rem;">Based on Pearson VUE logit benchmark (65%+ threshold)</p>
+        </div>
+
+        <!-- Stats Breakdown -->
+        <div class="card" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:space-between;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">Performance Summary</h3>
+          <div class="stats-breakdown-grid">
+            <div class="stat-box">
+              <strong id="resCorrectCount" class="text-success">0</strong>
+              <span>Correct</span>
+            </div>
+            <div class="stat-box">
+              <strong id="resWrongCount" class="text-danger">0</strong>
+              <span>Incorrect</span>
+            </div>
+            <div class="stat-box">
+              <strong id="resBlankCount" class="text-warning">0</strong>
+              <span>Unanswered</span>
+            </div>
+            <div class="stat-box">
+              <strong id="resTimeUsed">0m 0s</strong>
+              <span>Time Used</span>
+            </div>
+            <div class="stat-box">
+              <strong id="resAvgTime">0s</strong>
+              <span>Avg Time / Question</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1.5rem;">
+            <button type="button" class="btn btn-primary" id="btnRetestMissed">
+              🎯 Retest Missed Questions
+            </button>
+            <button type="button" class="btn btn-secondary" id="btnDownloadCSV">
+              📥 Download Results (CSV)
+            </button>
+            <button type="button" class="btn btn-secondary" id="btnRetryExam">
+              Start Another Exam
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="window.print()">
+              🖨 Print / PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Performance Section -->
+      <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">Clinical Category Breakdown</h3>
+        <div id="resCategoryBars"></div>
+      </div>
+
+      <!-- Question-by-Question Review -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.25rem; flex-wrap:wrap; gap:0.75rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin:0;">Detailed Question Review</h3>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="button" class="btn btn-sm btn-secondary review-filter-btn btn-primary" data-filter="all">All Questions</button>
+            <button type="button" class="btn btn-sm btn-secondary review-filter-btn" data-filter="incorrect">Incorrect & Unanswered</button>
+            <button type="button" class="btn btn-sm btn-secondary review-filter-btn" data-filter="marked">Marked for Review</button>
+            <button type="button" class="btn btn-sm btn-secondary review-filter-btn" data-filter="correct">Correct Only</button>
+          </div>
+        </div>
+
+        <div id="reviewItemsList"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: QUESTION BANK EXPLORER & FLASHCARD STUDY -->
+    <section id="view-explorer" class="view-panel hidden">
+      <div class="card">
+        <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">Question Bank Explorer & Study Mode</h2>
+        <p class="text-muted" style="margin-bottom: 1.25rem;">Search, study, and review rationales for all 5,600+ clinical NCLEX questions without starting a formal test.</p>
+
+        <div class="explorer-toolbar">
+          <input type="text" id="explorerSearchInput" class="form-input explorer-search" placeholder="Search by clinical topic, medication (e.g. digoxin, heparin), disease, lab...">
+          <select id="explorerBankSourceFilter" class="form-select" style="max-width: 250px;">
+            <option value="all">All Banks (11,718)</option>
+            <option value="Comprehensive NCLEX">Comprehensive (5,673)</option>
+            <option value="NCLEX Practice Bank 5">NCLEX Bank 5 (1,786)</option>
+            <option value="NCLEX Exam Cram">NCLEX Exam Cram (1,250)</option>
+            <option value="HESI 1200 Bank 6">HESI 1200 (1,148)</option>
+            <option value="NCLEX Practice Bank 4">NCLEX Bank 4 (977)</option>
+            <option value="NCSBN Official">Official NCSBN (884)</option>
+          </select>
+          <select id="explorerCategoryFilter" class="form-select" style="max-width: 260px;">
+            <option value="all">All Categories</option>
+          </select>
+          <select id="explorerTypeFilter" class="form-select" style="max-width: 180px;">
+            <option value="all">All Types</option>
+            <option value="single">Single Choice</option>
+            <option value="sata">SATA (Select All)</option>
+            <option value="numeric">Dosage Math</option>
+          </select>
+        </div>
+
+        <!-- Explorer Controls & Pagination Bar (Top) -->
+        <div class="explorer-nav-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem; background:var(--bg-subtle); padding:0.65rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
+          <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+            <span id="explorerMatchCount" class="font-bold text-main" style="font-size:0.92rem;">0 matching questions</span>
+            <span style="color:var(--border-strong);">|</span>
+            <div style="display:flex; align-items:center; gap:0.4rem; font-size:0.85rem; color:var(--text-muted);">
+              <span>Per page:</span>
+              <select id="explorerPageSizeSelect" class="form-select" style="padding:0.25rem 0.5rem; font-size:0.85rem; width:auto;">
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Go to Page Section (Top) -->
+          <div class="goto-page-wrap" style="display:flex; align-items:center; gap:0.45rem;">
+            <label for="explorerGoToPageTop" style="font-size:0.85rem; font-weight:700; color:var(--text-muted); white-space:nowrap;">Go to page:</label>
+            <input type="number" id="explorerGoToPageTop" class="form-input" min="1" max="1" placeholder="Page #" style="width:78px; padding:0.25rem 0.5rem; text-align:center; font-weight:700;">
+            <button type="button" class="btn btn-sm btn-primary" id="btnGoToPageTop">Go</button>
+            <span class="explorer-page-total" style="font-size:0.85rem; color:var(--text-muted); margin-left:0.25rem;">/ <span class="totalPagesSpan">1</span></span>
+          </div>
+        </div>
+
+        <!-- Top Quick Numbers Row -->
+        <div id="explorerTopPageNav" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+          <div id="explorerPageButtonsTop" style="display:flex; align-items:center; gap:0.25rem; flex-wrap:wrap;"></div>
+          <span id="explorerPageIndicator" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Page 1</span>
+        </div>
+
+        <div id="explorerQuestionsList"></div>
+
+        <!-- Comprehensive Pagination & Go to Page Section (Bottom) -->
+        <div class="explorer-pagination-card" style="margin-top:1.5rem; padding:1.25rem; background:var(--bg-subtle); border:1px solid var(--border); border-radius:var(--radius-lg); display:flex; flex-direction:column; gap:1rem; align-items:center;">
+          <!-- Top info row of bottom pagination card -->
+          <div style="display:flex; justify-content:space-between; width:100%; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+            <span id="explorerPageRangeSummary" style="font-size:0.9rem; font-weight:700; color:var(--text-main);">Showing questions 1 - 20</span>
+            
+            <!-- Go to page input (Bottom) -->
+            <div class="goto-page-wrap" style="display:flex; align-items:center; gap:0.5rem;">
+              <span style="font-size:0.88rem; font-weight:700; color:var(--text-muted);">Go to page:</span>
+              <input type="number" id="explorerGoToPageBottom" class="form-input" min="1" max="1" placeholder="Page #" style="width:85px; padding:0.35rem 0.6rem; text-align:center; font-weight:700;">
+              <button type="button" class="btn btn-sm btn-primary" id="btnGoToPageBottom">Go</button>
+            </div>
+          </div>
+
+          <!-- Page Numbers Navigation Bar with Numbers and Quick Jumps -->
+          <div class="pagination-controls-row" style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap; justify-content:center;">
+            <button type="button" class="btn btn-sm btn-secondary" id="btnExplorerFirst" title="First Page">« First</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="btnExplorerPrev" title="Previous Page">‹ Prev</button>
+            
+            <!-- Number buttons container (1, 2, 3 ... 50, 51 ... 586) -->
+            <div id="explorerPageNumberButtons" style="display:flex; align-items:center; gap:0.3rem; flex-wrap:wrap;"></div>
+
+            <button type="button" class="btn btn-sm btn-secondary" id="btnExplorerNext" title="Next Page">Next ›</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="btnExplorerLast" title="Last Page">Last »</button>
+          </div>
+
+          <!-- Quick Leap buttons: -10, -5, +5, +10 pages -->
+          <div style="display:flex; gap:0.5rem; align-items:center; font-size:0.8rem; color:var(--text-muted); flex-wrap:wrap;">
+            <span style="font-weight:600;">Quick Jump:</span>
+            <button type="button" class="btn btn-xs btn-secondary" id="btnJumpBack10" title="Back 10 Pages">-10 Pages</button>
+            <button type="button" class="btn btn-xs btn-secondary" id="btnJumpBack5" title="Back 5 Pages">-5 Pages</button>
+            <button type="button" class="btn btn-xs btn-secondary" id="btnJumpFwd5" title="Forward 5 Pages">+5 Pages</button>
+            <button type="button" class="btn btn-xs btn-secondary" id="btnJumpFwd10" title="Forward 10 Pages">+10 Pages</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 6: SAVED / BOOKMARKED QUESTIONS -->
+    <section id="view-saved" class="view-panel hidden">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem;">Bookmarked Study Questions</h2>
+            <p class="text-muted" id="savedCountBanner">0 saved questions</p>
+          </div>
+          <button type="button" class="btn btn-primary" id="btnStartSavedQuiz">
+            📝 Start Quiz from Bookmarks
+          </button>
+        </div>
+
+        <div id="savedQuestionsList"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 7: PERFORMANCE ANALYTICS & HISTORY -->
+    <section id="view-analytics" class="view-panel hidden">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem;">Exam History & Performance Log</h2>
+            <p class="text-muted">Track your progress and scores across all simulated exams and practice drills.</p>
+          </div>
+          <button type="button" class="btn btn-sm btn-danger" id="btnClearHistory">
+            Clear Test History
+          </button>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+            <thead>
+              <tr style="background: var(--bg-subtle);">
+                <th style="padding: 0.75rem; border-bottom: 2px solid var(--border);">Date / Time</th>
+                <th style="padding: 0.75rem; border-bottom: 2px solid var(--border);">Exam Title</th>
+                <th style="padding: 0.75rem; border-bottom: 2px solid var(--border);">Questions</th>
+                <th style="padding: 0.75rem; border-bottom: 2px solid var(--border);">Time Used</th>
+                <th style="padding: 0.75rem; border-bottom: 2px solid var(--border);">Score %</th>
+                <th style="padding: 0.75rem; border-bottom: 2px solid var(--border);">Result</th>
+              </tr>
+            </thead>
+            <tbody id="analyticsHistoryTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: PEARSON VUE ON-SCREEN CALCULATOR -->
+  <div id="modalCalculator" class="modal-overlay hidden">
+    <div class="modal-dialog calc-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🖩 NCLEX Calculator</h3>
+        <button type="button" class="modal-close" id="btnCloseCalculator">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="calc-display" id="calcDisplay">0</div>
+        <div class="calc-grid">
+          <button type="button" class="calc-btn action" data-val="C">C</button>
+          <button type="button" class="calc-btn action" data-val="CE">CE</button>
+          <button type="button" class="calc-btn action" data-val="sqrt">√</button>
+          <button type="button" class="calc-btn op" data-val="/">÷</button>
+
+          <button type="button" class="calc-btn" data-val="7">7</button>
+          <button type="button" class="calc-btn" data-val="8">8</button>
+          <button type="button" class="calc-btn" data-val="9">9</button>
+          <button type="button" class="calc-btn op" data-val="*">×</button>
+
+          <button type="button" class="calc-btn" data-val="4">4</button>
+          <button type="button" class="calc-btn" data-val="5">5</button>
+          <button type="button" class="calc-btn" data-val="6">6</button>
+          <button type="button" class="calc-btn op" data-val="-">−</button>
+
+          <button type="button" class="calc-btn" data-val="1">1</button>
+          <button type="button" class="calc-btn" data-val="2">2</button>
+          <button type="button" class="calc-btn" data-val="3">3</button>
+          <button type="button" class="calc-btn op" data-val="+">+</button>
+
+          <button type="button" class="calc-btn action" data-val="+/-">±</button>
+          <button type="button" class="calc-btn" data-val="0">0</button>
+          <button type="button" class="calc-btn" data-val=".">.</button>
+          <button type="button" class="calc-btn op" data-val="%">%</button>
+
+          <button type="button" class="calc-btn equal" data-val="=">=</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NORMAL LAB VALUES REFERENCE -->
+  <div id="modalLabValues" class="modal-overlay hidden">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🧪 NCLEX Normal Laboratory Reference Values</h3>
+        <button type="button" class="modal-close" id="btnCloseLabValues">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="labs-search">
+          <input type="text" id="labSearchInput" class="form-input" placeholder="Search lab test (e.g. potassium, WBC, INR, creatinine, ABG, troponin)...">
+        </div>
+        <div id="labValuesModalBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="text-align:center; padding: 1.5rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: auto;">
+    NCLEX Exam Simulator Pro · Clinical practice simulation tool · Verify clinical decisions with institutional protocols and authoritative nursing literature.
+  </footer>
+
+  <!-- Scripts: Pre-bundled question bank and core logic -->
+  <script src="./data/questions.js"></script>
+  <script src="./data/lab-values.js"></script>
+  <script src="./app.js"></script>
+
+</body>
+</html>

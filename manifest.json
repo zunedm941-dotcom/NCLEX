@@ -1,0 +1,16 @@
+{
+  "name": "NCLEX Exam Simulator Pro",
+  "short_name": "NCLEX Sim",
+  "description": "Comprehensive NextGen NCLEX Clinical Exam Simulator & Question Bank with 5,600+ questions, Pearson VUE tools, and performance analytics.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231e3a8a'/><path d='M50 20 L50 80 M20 50 L80 50' stroke='white' stroke-width='14' stroke-linecap='round'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
